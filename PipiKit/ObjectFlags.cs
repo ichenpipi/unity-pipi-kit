@@ -43,6 +43,9 @@ namespace PipiKit
         public bool enableChildNameFilter = false;
 
         [SerializeField]
+        public bool skipFilteredRecursive = false;
+
+        [SerializeField]
         public List<string> excludeChildNameList = new List<string>();
 
         private void OnEnable()
@@ -99,8 +102,13 @@ namespace PipiKit
             WalkTransform(transform,
                 (t =>
                 {
-                    // 排除 ObjectFlags 组件
+                    // 排除 ObjectFlags 组件及其子节点
                     if (t.GetComponent<ObjectFlags>() != null)
+                    {
+                        return false;
+                    }
+                    // 跳过排除列表中的节点，并停止递归处理其子节点
+                    if (enableChildNameFilter && excludeChildNameList.Contains(t.name) && skipFilteredRecursive)
                     {
                         return false;
                     }
@@ -121,8 +129,13 @@ namespace PipiKit
             WalkTransform(transform,
                 (t =>
                 {
-                    // 排除 ObjectFlags 组件
+                    // 排除 ObjectFlags 组件及其子节点
                     if (t.GetComponent<ObjectFlags>() != null)
+                    {
+                        return false;
+                    }
+                    // 跳过排除列表中的节点，并停止递归处理其子节点
+                    if (enableChildNameFilter && excludeChildNameList.Contains(t.name) && skipFilteredRecursive)
                     {
                         return false;
                     }
