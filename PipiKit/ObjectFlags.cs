@@ -126,8 +126,12 @@ namespace PipiKit
                     {
                         return false;
                     }
-                    // 更新 Flags
-                    t.gameObject.hideFlags = HideFlags.None;
+                    // 名称过滤
+                    if (!enableChildNameFilter || !excludeChildNameList.Contains(t.name))
+                    {
+                        // 更新 Flags
+                        t.gameObject.hideFlags = HideFlags.None;
+                    }
                     // 递归子节点
                     return true;
                 })
