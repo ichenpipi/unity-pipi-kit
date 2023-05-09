@@ -1,10 +1,13 @@
+#if UNITY_EDITOR
 using System.Text.RegularExpressions;
 using UnityEditor;
+#endif
 using UnityEngine;
 
-namespace PipiKit
+namespace ChenPipi
 {
 
+#if UNITY_EDITOR
     public class DisplayNameAttribute : PropertyAttribute
     {
 
@@ -34,11 +37,14 @@ namespace PipiKit
             }
             else
             {
-                label.text = ((DisplayNameAttribute) attribute)?.Name;
+                label.text = ((DisplayNameAttribute)attribute)?.Name;
             }
             EditorGUI.PropertyField(position, property, label);
         }
 
     }
+#else
+    public class DisplayNameAttribute : PropertyAttribute { }
+#endif
 
 }
