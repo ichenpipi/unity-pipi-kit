@@ -101,6 +101,25 @@ namespace ChenPipi.UI
 
         #endregion
 
+        #region Vector2 Extension
+
+        private static float Cross(this Vector2 self, Vector2 other)
+        {
+            return (float)((double)self.x * (double)other.y - (double)self.y * (double)other.x);
+        }
+
+        private static bool SameLine(this Vector2 self, Vector2 other)
+        {
+            return (double)Mathf.Abs(self.Cross(other)) < 9.999999747378752E-06;
+        }
+
+        private static bool SameDirection(this Vector2 self, Vector2 other)
+        {
+            return self.SameLine(other) && (double)Vector2.Dot(self, other) > 0.0;
+        }
+
+        #endregion
+
     }
 
 }
