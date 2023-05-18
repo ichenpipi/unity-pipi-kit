@@ -4,8 +4,45 @@ using UnityEngine;
 namespace ChenPipi.UI
 {
 
-    public static class PolygonImageUtility
+    public static class PolygonUtility
     {
+
+        public static bool IsPointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+        {
+            Vector2 ab = b - a,
+                ac = c - a,
+                bc = c - b,
+                bd = p - b,
+                ad = p - a;
+            return (
+                (ab.Cross(ac) >= 0 ^ ab.Cross(ad) < 0) &&
+                (ab.Cross(ac) >= 0 ^ ac.Cross(ad) >= 0) &&
+                (bc.Cross(ab) > 0 ^ bc.Cross(bd) >= 0)
+            );
+        }
+
+        // public static bool IsPointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+        // {
+        //     // Compute vectors
+        //     var v0 = c - a;
+        //     var v1 = b - a;
+        //     var v2 = p - a;
+        //
+        //     // Compute dot products
+        //     var dot00 = Vector2.Dot(v0, v0);
+        //     var dot01 = Vector2.Dot(v0, v1);
+        //     var dot02 = Vector2.Dot(v0, v2);
+        //     var dot11 = Vector2.Dot(v1, v1);
+        //     var dot12 = Vector2.Dot(v1, v2);
+        //
+        //     // Compute barycentric coordinates
+        //     var invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+        //     var u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+        //     var v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+        //
+        //     // Check if point is in triangle
+        //     return (u >= 0) && (v >= 0) && (u + v < 1);
+        // }
 
         #region Ear Clipping
 
@@ -83,20 +120,6 @@ namespace ChenPipi.UI
             indices.Add(indexMap[verts[0]]);
 
             return indices;
-        }
-
-        public static bool IsPointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
-        {
-            Vector2 ab = b - a,
-                ac = c - a,
-                bc = c - b,
-                bd = p - b,
-                ad = p - a;
-            return (
-                (ab.Cross(ac) >= 0 ^ ab.Cross(ad) < 0) &&
-                (ab.Cross(ac) >= 0 ^ ac.Cross(ad) >= 0) &&
-                (bc.Cross(ab) > 0 ^ bc.Cross(bd) >= 0)
-            );
         }
 
         #endregion

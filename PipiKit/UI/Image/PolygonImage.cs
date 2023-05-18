@@ -73,7 +73,7 @@ namespace ChenPipi.UI
             }
 
             // 顶点索引
-            List<int> indices = PolygonImageUtility.EarClipping(m_Vertices);
+            List<int> indices = PolygonUtility.EarClipping(m_Vertices);
 
             // 重新填充
             vh.Clear();
