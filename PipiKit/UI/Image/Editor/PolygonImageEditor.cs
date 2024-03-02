@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UI;
@@ -96,4 +95,3 @@ namespace ChenPipi.UI
     }
 
 }
-#endif
