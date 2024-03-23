@@ -9,15 +9,42 @@ namespace ChenPipi.UI
     /// </summary>
     /// <author>陈皮皮</author>
     /// <version>20220926</version>
-    [AddComponentMenu("UI/Effects/Gradient (2 Colors)")]
-    public class Gradient2 : BaseMeshEffect
+    [DisallowMultipleComponent]
+    [AddComponentMenu("UI/Effects/Gradient")]
+    public class Gradient : BaseMeshEffect
     {
 
         [SerializeField]
-        public Color topColor = Color.white;
+        private Color m_TopColor = Color.white;
 
         [SerializeField]
-        public Color bottomColor = Color.white;
+        private Color m_BottomColor = Color.white;
+
+        public Color topColor
+        {
+            get { return m_TopColor; }
+            set
+            {
+                m_TopColor = value;
+                if (graphic != null)
+                {
+                    graphic.SetVerticesDirty();
+                }
+            }
+        }
+
+        public Color bottomColor
+        {
+            get { return m_BottomColor; }
+            set
+            {
+                m_BottomColor = value;
+                if (graphic != null)
+                {
+                    graphic.SetVerticesDirty();
+                }
+            }
+        }
 
         public override void ModifyMesh(VertexHelper vh)
         {
@@ -60,7 +87,7 @@ namespace ChenPipi.UI
             {
                 UIVertex vertex = vertexes[i];
                 float t = (vertex.position.y - bottom) / height;
-                vertex.color *= Color.Lerp(bottomColor, topColor, t);
+                vertex.color = Color.Lerp(bottomColor, topColor, t);
                 vh.SetUIVertex(vertex, i);
             }
         }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ChenPipi.Particle
+namespace ChenPipi
 {
 
     [RequireComponent(typeof(ParticleSystem))]

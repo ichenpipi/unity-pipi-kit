@@ -17,34 +17,35 @@ namespace ChenPipi.UI
         public bool EnableGraphic;
 
         [Tooltip("图形组件颜色")]
-        public Color GraphicColor = new Color(1f, 1f, 1f, 1f);
+        public Color GraphicColor;
 
         [Tooltip("描边（Outline）")]
         public bool EnableOutline;
 
         [Tooltip("描边颜色")]
-        public Color OutlineColor = new Color(1f, 1f, 1f, 1f);
+        public Color OutlineColor;
 
         [Tooltip("阴影（Shadow）")]
         public bool EnableShadow;
 
         [Tooltip("阴影颜色")]
-        public Color ShadowColor = new Color(1f, 1f, 1f, 1f);
+        public Color ShadowColor;
 
         [Tooltip("渐变（Gradient）")]
         public bool EnableGradient;
 
         [Tooltip("渐变颜色上")]
-        public Color GradientTopColor = new Color(1f, 1f, 1f, 1f);
+        public Color GradientTopColor;
 
         [Tooltip("渐变颜色下")]
-        public Color GradientBottomColor = new Color(1f, 1f, 1f, 1f);
+        public Color GradientBottomColor;
 
     }
 
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
-    public class UIColorStyler : MonoBehaviour
+    [AddComponentMenu("UI/Effects/ColorStyler")]
+    public class ColorStyler : MonoBehaviour
     {
 
         [SerializeField, Tooltip("样式列表")]
@@ -122,11 +123,16 @@ namespace ChenPipi.UI
 
         #endregion
 
-        protected void Awake()
+        protected void OnEnable()
+        {
+
+        }
+
+        protected void Start()
         {
             if (!string.IsNullOrEmpty(DefaultStyleName))
             {
-                ApplyStyleByName(DefaultStyleName);
+                ApplyStyle(DefaultStyleName);
             }
         }
 
@@ -142,11 +148,32 @@ namespace ChenPipi.UI
             {
                 if (m_StyleMap.ContainsKey(style.Name))
                 {
-                    Debug.LogError(string.Format("[CUIColorStyler] Style name '{0}' duplicated!", style.Name), this);
+                    Debug.LogError(string.Format("[ColorStyler] Style name '{0}' duplicated!", style.Name), this);
                     continue;
                 }
                 m_StyleMap.Add(style.Name, style);
             }
+        }
+
+        public void ApplyStyle(string name)
+        {
+            ColorStyle style = GetStyle(name);
+            if (style == null)
+            {
+                Debug.LogError(string.Format("[ColorStyler] Cannot found style with name '{0}'!", name), this);
+                return;
+            }
+            ApplyStyle(style);
+        }
+
+        public void ApplyStyleByIndex(int index)
+        {
+            if (index < 0 || index > StyleList.Count - 1)
+            {
+                Debug.LogError(string.Format("[ColorStyler] Cannot found style with index '{0}'!", index), this);
+                return;
+            }
+            ApplyStyle(StyleList[index]);
         }
 
         public ColorStyle GetStyle(string name)
@@ -170,27 +197,6 @@ namespace ChenPipi.UI
             return null;
         }
 
-        public void ApplyStyleByName(string name)
-        {
-            ColorStyle style = GetStyle(name);
-            if (style == null)
-            {
-                Debug.LogError(string.Format("[CUIColorStyler] Cannot found style with name '{0}'!", name), this);
-                return;
-            }
-            ApplyStyle(style);
-        }
-
-        public void ApplyStyleByIndex(int index)
-        {
-            if (index < 0 || index > StyleList.Count - 1)
-            {
-                Debug.LogError(string.Format("[CUIColorStyler] Cannot found style with index '{0}'!", index), this);
-                return;
-            }
-            ApplyStyle(StyleList[index]);
-        }
-
         public void ApplyStyle(ColorStyle style)
         {
             if (style.EnableGraphic) ApplyGraphicColor(style.GraphicColor);
@@ -199,13 +205,13 @@ namespace ChenPipi.UI
             if (style.EnableGradient) ApplyGradientColor(style.GradientTopColor, style.GradientBottomColor);
         }
 
-        #region ApplyStyleImplementation
+        #region Styling Implementation
 
         public void ApplyGraphicColor(Color color)
         {
             if (GraphicComp == null)
             {
-                Debug.LogWarning("[CUIColorStyler] Applying color failed, no 'MaskableGraphic' component found!", this);
+                Debug.LogWarning("[ColorStyler] Applying color failed, no 'MaskableGraphic' component found!", this);
                 return;
             }
             m_GraphicComp.color = color;
@@ -215,7 +221,7 @@ namespace ChenPipi.UI
         {
             if (OutlineComp == null)
             {
-                Debug.LogWarning("[CUIColorStyler] Applying color failed, no 'Outline' component found!", this);
+                Debug.LogWarning("[ColorStyler] Applying color failed, no 'Outline' component found!", this);
                 return;
             }
             m_OutlineComp.effectColor = color;
@@ -225,7 +231,7 @@ namespace ChenPipi.UI
         {
             if (ShadowComp == null)
             {
-                Debug.LogWarning("[CUIColorStyler] Applying color failed, no 'Shadow' component found!", this);
+                Debug.LogWarning("[ColorStyler] Applying color failed, no 'Shadow' component found!", this);
                 return;
             }
             m_ShadowComp.effectColor = color;
@@ -235,16 +241,11 @@ namespace ChenPipi.UI
         {
             if (GradientComp == null)
             {
-                Debug.LogWarning("[CUIColorStyler] Applying color failed, no 'Gradient' component found!", this);
+                Debug.LogWarning("[ColorStyler] Applying color failed, no 'Gradient' component found!", this);
                 return;
             }
-
-#if UNITY_EDITOR
-            if (GraphicComp)
-            {
-                m_GraphicComp.SetVerticesDirty();
-            }
-#endif
+            m_GradientComp.topColor = topColor;
+            m_GradientComp.bottomColor = bottomColor;
         }
 
         #endregion

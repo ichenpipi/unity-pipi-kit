@@ -9,21 +9,74 @@ namespace ChenPipi.UI
     /// </summary>
     /// <author>陈皮皮</author>
     /// <version>20220926</version>
+    [DisallowMultipleComponent]
     [AddComponentMenu("UI/Effects/Gradient (4 Colors)")]
     public class Gradient4 : BaseMeshEffect
     {
 
         [SerializeField]
-        public Color topLeftColor = Color.white;
+        private Color m_TopLeftColor = Color.white;
 
         [SerializeField]
-        public Color topRightColor = Color.white;
+        private Color m_TopRightColor = Color.white;
 
         [SerializeField]
-        public Color bottomLeftColor = Color.white;
+        private Color m_BottomLeftColor = Color.white;
 
         [SerializeField]
-        public Color bottomRightColor = Color.white;
+        private Color m_BottomRightColor = Color.white;
+
+        public Color topLeftColor
+        {
+            get { return m_TopLeftColor; }
+            set
+            {
+                m_TopLeftColor = value;
+                if (graphic != null)
+                {
+                    graphic.SetVerticesDirty();
+                }
+            }
+        }
+
+        public Color topRightColor
+        {
+            get { return m_TopRightColor; }
+            set
+            {
+                m_TopRightColor = value;
+                if (graphic != null)
+                {
+                    graphic.SetVerticesDirty();
+                }
+            }
+        }
+
+        public Color bottomLeftColor
+        {
+            get { return m_BottomLeftColor; }
+            set
+            {
+                m_BottomLeftColor = value;
+                if (graphic != null)
+                {
+                    graphic.SetVerticesDirty();
+                }
+            }
+        }
+
+        public Color bottomRightColor
+        {
+            get { return m_BottomRightColor; }
+            set
+            {
+                m_BottomRightColor = value;
+                if (graphic != null)
+                {
+                    graphic.SetVerticesDirty();
+                }
+            }
+        }
 
         public override void ModifyMesh(VertexHelper vh)
         {
@@ -80,7 +133,7 @@ namespace ChenPipi.UI
                 UIVertex vertex = vertexes[i];
                 t.x = (vertex.position.x - left) / width;
                 t.y = (vertex.position.y - bottom) / height;
-                vertex.color *= Bilerp(topLeftColor, topRightColor, bottomLeftColor, bottomRightColor, t);
+                vertex.color = BiLerp(topLeftColor, topRightColor, bottomLeftColor, bottomRightColor, t);
                 vh.SetUIVertex(vertex, i);
             }
         }
@@ -94,7 +147,7 @@ namespace ChenPipi.UI
         /// <param name="b2"></param>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static Color Bilerp(Color a1, Color a2, Color b1, Color b2, Vector2 t)
+        private static Color BiLerp(Color a1, Color a2, Color b1, Color b2, Vector2 t)
         {
             Color a = Color.LerpUnclamped(a1, a2, t.x);
             Color b = Color.LerpUnclamped(b1, b2, t.x);

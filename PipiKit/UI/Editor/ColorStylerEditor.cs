@@ -5,12 +5,12 @@ using UnityEngine;
 namespace ChenPipi.UI
 {
 
-    [CustomEditor(typeof(UIColorStyler))]
+    [CustomEditor(typeof(ColorStyler))]
     [CanEditMultipleObjects]
-    public class CUIColorStylerEditor : Editor
+    public class ColorStylerEditor : Editor
     {
 
-        private UIColorStyler m_TargetComp;
+        private ColorStyler m_TargetComp;
 
         private GUIContent m_DefaultStyleDropdownGUIContent;
 
@@ -22,9 +22,9 @@ namespace ChenPipi.UI
 
         private void OnEnable()
         {
-            m_TargetComp = target as UIColorStyler;
+            m_TargetComp = target as ColorStyler;
 
-            m_DefaultStyleDropdownGUIContent = new GUIContent("默认样式", "元素初始化（Awake）时自动应用的样式");
+            m_DefaultStyleDropdownGUIContent = new GUIContent("默认样式", "元素初始化（Start）时自动应用的样式");
             m_PreviewStyleDropdownGUIContent = new GUIContent("应用样式", "下拉选择样式");
         }
 
@@ -65,7 +65,7 @@ namespace ChenPipi.UI
                     m_PreviewStyleIndex = DrawPreviewStyleDropdownGUI(m_PreviewStyleIndex);
                     if (GUILayout.Button("应用"))
                     {
-                        m_TargetComp.ApplyStyleByName(GetStyleNameByIndex(m_PreviewStyleIndex));
+                        m_TargetComp.ApplyStyle(GetStyleNameByIndex(m_PreviewStyleIndex));
                     }
                 }
                 EditorGUILayout.EndHorizontal();
@@ -136,9 +136,9 @@ namespace ChenPipi.UI
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            UIColorStyler targetComp = (UIColorStyler)property.serializedObject.targetObject;
+            ColorStyler targetComp = (ColorStyler)property.serializedObject.targetObject;
 
-            EditorGUI.BeginProperty(position, label, property);
+            label = EditorGUI.BeginProperty(position, label, property);
 
             EditorStyles.foldout.richText = true;
             EditorStyles.label.richText = true;
@@ -166,47 +166,10 @@ namespace ChenPipi.UI
                     name.stringValue = EditorGUILayout.TextField("样式名称", name.stringValue);
                 }
 
-                SerializedProperty enableGraphic = property.FindPropertyRelative("EnableGraphic");
-                EditorGUILayout.PropertyField(enableGraphic);
-                if (enableGraphic.boolValue)
-                {
-                    EditorGUI.indentLevel++;
-                    SerializedProperty graphicColor = property.FindPropertyRelative("GraphicColor");
-                    EditorGUILayout.PropertyField(graphicColor);
-                    EditorGUI.indentLevel--;
-                }
-
-                SerializedProperty enableOutline = property.FindPropertyRelative("EnableOutline");
-                EditorGUILayout.PropertyField(enableOutline);
-                if (enableOutline.boolValue)
-                {
-                    EditorGUI.indentLevel++;
-                    SerializedProperty outlineColor = property.FindPropertyRelative("OutlineColor");
-                    EditorGUILayout.PropertyField(outlineColor);
-                    EditorGUI.indentLevel--;
-                }
-
-                SerializedProperty enableShadow = property.FindPropertyRelative("EnableShadow");
-                EditorGUILayout.PropertyField(enableShadow);
-                if (enableShadow.boolValue)
-                {
-                    EditorGUI.indentLevel++;
-                    SerializedProperty shadowColor = property.FindPropertyRelative("ShadowColor");
-                    EditorGUILayout.PropertyField(shadowColor);
-                    EditorGUI.indentLevel--;
-                }
-
-                SerializedProperty enableGradient = property.FindPropertyRelative("EnableGradient");
-                EditorGUILayout.PropertyField(enableGradient);
-                if (enableGradient.boolValue)
-                {
-                    EditorGUI.indentLevel++;
-                    SerializedProperty gradientTopColor = property.FindPropertyRelative("GradientTopColor");
-                    EditorGUILayout.PropertyField(gradientTopColor);
-                    SerializedProperty gradientBottomColor = property.FindPropertyRelative("GradientBottomColor");
-                    EditorGUILayout.PropertyField(gradientBottomColor);
-                    EditorGUI.indentLevel--;
-                }
+                DrawExpandableBoolProperty(property, "EnableGraphic", "GraphicColor");
+                DrawExpandableBoolProperty(property, "EnableOutline", "OutlineColor");
+                DrawExpandableBoolProperty(property, "EnableShadow", "ShadowColor");
+                DrawExpandableBoolProperty(property, "EnableGradient", "GradientTopColor", "GradientBottomColor");
 
                 // 编辑器附加功能
                 {
@@ -229,7 +192,23 @@ namespace ChenPipi.UI
             EditorGUI.EndProperty();
         }
 
-        private static bool CheckStyleNameDuplicates(UIColorStyler colorStyler, string name)
+        private static void DrawExpandableBoolProperty(SerializedProperty property, string boolPropertyName, params string[] subPropertyNames)
+        {
+            SerializedProperty boolProperty = property.FindPropertyRelative(boolPropertyName);
+            EditorGUILayout.PropertyField(boolProperty);
+            if (boolProperty.boolValue)
+            {
+                EditorGUI.indentLevel++;
+                foreach (string subPropertyName in subPropertyNames)
+                {
+                    SerializedProperty subProperty = property.FindPropertyRelative(subPropertyName);
+                    EditorGUILayout.PropertyField(subProperty);
+                }
+                EditorGUI.indentLevel--;
+            }
+        }
+
+        private static bool CheckStyleNameDuplicates(ColorStyler colorStyler, string name)
         {
             int count = 0;
             foreach (ColorStyle style in colorStyler.StyleList)
@@ -242,7 +221,7 @@ namespace ChenPipi.UI
             return count > 1;
         }
 
-        private static void ApplyStyleBySerializedProperty(UIColorStyler colorStyler, SerializedProperty property)
+        private static void ApplyStyleBySerializedProperty(ColorStyler colorStyler, SerializedProperty property)
         {
             SerializedProperty enableGraphic = property.FindPropertyRelative("EnableGraphic");
             if (enableGraphic.boolValue)
