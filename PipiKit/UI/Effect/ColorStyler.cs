@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,7 +52,7 @@ namespace ChenPipi.UI
         [SerializeField, Tooltip("样式列表")]
         public List<ColorStyle> StyleList = new List<ColorStyle>();
 
-        [SerializeField, Tooltip("默认样式名称")]
+        [SerializeField, Tooltip("默认样式名称（组件 Start 时自动应用）")]
         public string DefaultStyleName;
 
         private readonly Dictionary<string, ColorStyle> m_StyleMap = new Dictionary<string, ColorStyle>();
@@ -123,11 +124,6 @@ namespace ChenPipi.UI
 
         #endregion
 
-        protected void OnEnable()
-        {
-
-        }
-
         protected void Start()
         {
             if (!string.IsNullOrEmpty(DefaultStyleName))
@@ -195,6 +191,21 @@ namespace ChenPipi.UI
             }
 
             return null;
+        }
+
+        public string[] GetStyleNames()
+        {
+            if (StyleList.Count == 0)
+            {
+                return new string[] { };
+            }
+
+            if (m_StyleMap.Count == 0)
+            {
+                RefreshIndexingMap();
+            }
+
+            return m_StyleMap.Keys.ToArray();
         }
 
         public void ApplyStyle(ColorStyle style)

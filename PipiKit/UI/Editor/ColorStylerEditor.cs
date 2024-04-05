@@ -24,7 +24,7 @@ namespace ChenPipi.UI
         {
             m_TargetComp = target as ColorStyler;
 
-            m_DefaultStyleDropdownGUIContent = new GUIContent("默认样式", "元素初始化（Start）时自动应用的样式");
+            m_DefaultStyleDropdownGUIContent = new GUIContent("默认样式", "组件初始化（Start）时自动应用的样式");
             m_PreviewStyleDropdownGUIContent = new GUIContent("应用样式", "下拉选择样式");
         }
 
@@ -97,6 +97,8 @@ namespace ChenPipi.UI
             return list[index].Name;
         }
 
+        #region DropdownGUI
+
         private static readonly List<GUIContent> m_DropdownItemList = new List<GUIContent>();
 
         private int DrawDefaultStyleDropdownGUI(int selectedIndex)
@@ -127,6 +129,8 @@ namespace ChenPipi.UI
             }
             return EditorGUILayout.Popup(m_PreviewStyleDropdownGUIContent, selectedIndex, m_DropdownItemList.ToArray());
         }
+
+        #endregion
 
     }
 
