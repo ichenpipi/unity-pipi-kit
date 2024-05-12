@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ChenPipi.UI
+namespace ChenPipi.PipiKit.UI
 {
 
     [CustomEditor(typeof(ColorStyler))]
@@ -32,7 +32,7 @@ namespace ChenPipi.UI
         {
             serializedObject.Update();
             {
-                SerializedProperty styleList = serializedObject.FindProperty("StyleList");
+                SerializedProperty styleList = serializedObject.FindProperty("styleList");
                 EditorGUILayout.PropertyField(styleList, true);
                 // styleList.isExpanded = EditorGUILayout.Foldout(styleList.isExpanded, styleList.displayName);
                 // if (styleList.isExpanded)
@@ -45,7 +45,7 @@ namespace ChenPipi.UI
                 //     EditorGUI.indentLevel--;
                 // }
 
-                SerializedProperty defaultStyleName = serializedObject.FindProperty("DefaultStyleName");
+                SerializedProperty defaultStyleName = serializedObject.FindProperty("defaultStyleName");
                 // EditorGUILayout.PropertyField(defaultStyleName);
                 m_DefaultStyleIndex = GetStyleIndexByName(defaultStyleName.stringValue) + 1;
                 EditorGUI.BeginChangeCheck();
@@ -75,11 +75,11 @@ namespace ChenPipi.UI
 
         private int GetStyleIndexByName(string name)
         {
-            List<ColorStyle> list = m_TargetComp.StyleList;
+            List<ColorStyle> list = m_TargetComp.styleList;
             for (int index = 0; index < list.Count; index++)
             {
                 ColorStyle style = list[index];
-                if (style.Name.Equals(name))
+                if (style.name.Equals(name))
                 {
                     return index;
                 }
@@ -89,45 +89,45 @@ namespace ChenPipi.UI
 
         private string GetStyleNameByIndex(int index)
         {
-            List<ColorStyle> list = m_TargetComp.StyleList;
+            List<ColorStyle> list = m_TargetComp.styleList;
             if (index < 0 || index > list.Count - 1)
             {
                 return string.Empty;
             }
-            return list[index].Name;
+            return list[index].name;
         }
 
         #region DropdownGUI
 
-        private static readonly List<GUIContent> m_DropdownItemList = new List<GUIContent>();
+        private static readonly List<GUIContent> s_DropdownItemList = new List<GUIContent>();
 
         private int DrawDefaultStyleDropdownGUI(int selectedIndex)
         {
-            m_DropdownItemList.Clear();
-            m_DropdownItemList.Add(new GUIContent("无"));
-            foreach (ColorStyle style in m_TargetComp.StyleList)
+            s_DropdownItemList.Clear();
+            s_DropdownItemList.Add(new GUIContent("无"));
+            foreach (ColorStyle style in m_TargetComp.styleList)
             {
-                if (string.IsNullOrEmpty(style.Name))
+                if (string.IsNullOrEmpty(style.name))
                 {
                     continue;
                 }
-                m_DropdownItemList.Add(new GUIContent(style.Name));
+                s_DropdownItemList.Add(new GUIContent(style.name));
             }
-            return EditorGUILayout.Popup(m_DefaultStyleDropdownGUIContent, selectedIndex, m_DropdownItemList.ToArray());
+            return EditorGUILayout.Popup(m_DefaultStyleDropdownGUIContent, selectedIndex, s_DropdownItemList.ToArray());
         }
 
         private int DrawPreviewStyleDropdownGUI(int selectedIndex)
         {
-            m_DropdownItemList.Clear();
-            foreach (ColorStyle style in m_TargetComp.StyleList)
+            s_DropdownItemList.Clear();
+            foreach (ColorStyle style in m_TargetComp.styleList)
             {
-                if (string.IsNullOrEmpty(style.Name))
+                if (string.IsNullOrEmpty(style.name))
                 {
                     continue;
                 }
-                m_DropdownItemList.Add(new GUIContent(style.Name));
+                s_DropdownItemList.Add(new GUIContent(style.name));
             }
-            return EditorGUILayout.Popup(m_PreviewStyleDropdownGUIContent, selectedIndex, m_DropdownItemList.ToArray());
+            return EditorGUILayout.Popup(m_PreviewStyleDropdownGUIContent, selectedIndex, s_DropdownItemList.ToArray());
         }
 
         #endregion
@@ -147,7 +147,7 @@ namespace ChenPipi.UI
             EditorStyles.foldout.richText = true;
             EditorStyles.label.richText = true;
 
-            SerializedProperty name = property.FindPropertyRelative("Name");
+            SerializedProperty name = property.FindPropertyRelative("name");
             bool isNameEmpty = string.IsNullOrEmpty(name.stringValue);
             bool isNameDuplicated = CheckStyleNameDuplicates(targetComp, name.stringValue);
             if (isNameEmpty || isNameDuplicated)
@@ -215,9 +215,9 @@ namespace ChenPipi.UI
         private static bool CheckStyleNameDuplicates(ColorStyler colorStyler, string name)
         {
             int count = 0;
-            foreach (ColorStyle style in colorStyler.StyleList)
+            foreach (ColorStyle style in colorStyler.styleList)
             {
-                if (style.Name.Equals(name))
+                if (style.name.Equals(name))
                 {
                     count++;
                 }
@@ -227,32 +227,32 @@ namespace ChenPipi.UI
 
         private static void ApplyStyleBySerializedProperty(ColorStyler colorStyler, SerializedProperty property)
         {
-            SerializedProperty enableGraphic = property.FindPropertyRelative("EnableGraphic");
+            SerializedProperty enableGraphic = property.FindPropertyRelative("enableGraphic");
             if (enableGraphic.boolValue)
             {
-                SerializedProperty graphicColor = property.FindPropertyRelative("GraphicColor");
+                SerializedProperty graphicColor = property.FindPropertyRelative("graphicColor");
                 colorStyler.ApplyGraphicColor(graphicColor.colorValue);
             }
 
-            SerializedProperty enableOutline = property.FindPropertyRelative("EnableOutline");
+            SerializedProperty enableOutline = property.FindPropertyRelative("enableOutline");
             if (enableOutline.boolValue)
             {
-                SerializedProperty outlineColor = property.FindPropertyRelative("OutlineColor");
+                SerializedProperty outlineColor = property.FindPropertyRelative("outlineColor");
                 colorStyler.ApplyOutlineColor(outlineColor.colorValue);
             }
 
-            SerializedProperty enableShadow = property.FindPropertyRelative("EnableShadow");
+            SerializedProperty enableShadow = property.FindPropertyRelative("enableShadow");
             if (enableShadow.boolValue)
             {
-                SerializedProperty shadowColor = property.FindPropertyRelative("ShadowColor");
+                SerializedProperty shadowColor = property.FindPropertyRelative("shadowColor");
                 colorStyler.ApplyShadowColor(shadowColor.colorValue);
             }
 
-            SerializedProperty enableGradient = property.FindPropertyRelative("EnableGradient");
+            SerializedProperty enableGradient = property.FindPropertyRelative("enableGradient");
             if (enableGradient.boolValue)
             {
-                SerializedProperty gradientTopColor = property.FindPropertyRelative("GradientTopColor");
-                SerializedProperty gradientBottomColor = property.FindPropertyRelative("GradientBottomColor");
+                SerializedProperty gradientTopColor = property.FindPropertyRelative("gradientTopColor");
+                SerializedProperty gradientBottomColor = property.FindPropertyRelative("gradientBottomColor");
                 colorStyler.ApplyGradientColor(gradientTopColor.colorValue, gradientBottomColor.colorValue);
             }
         }

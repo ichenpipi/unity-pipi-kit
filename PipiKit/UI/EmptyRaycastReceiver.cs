@@ -1,8 +1,10 @@
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace ChenPipi.UI
+namespace ChenPipi.PipiKit.UI
 {
 
+    [AddComponentMenu("UI/PipiKit/EmptyRaycastReceiver")]
     public class EmptyRaycastReceiver : MaskableGraphic
     {
 

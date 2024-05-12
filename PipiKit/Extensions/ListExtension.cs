@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChenPipi
+namespace ChenPipi.PipiKit
 {
 
     public static class ListExtension

@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ChenPipi.UI
+namespace ChenPipi.PipiKit.UI
 {
 
     [Serializable]
@@ -12,48 +12,48 @@ namespace ChenPipi.UI
     {
 
         [Tooltip("样式名称")]
-        public string Name;
+        public string name;
 
         [Tooltip("图形组件（Text/Image/RawImage）")]
-        public bool EnableGraphic;
+        public bool enableGraphic;
 
         [Tooltip("图形组件颜色")]
-        public Color GraphicColor;
+        public Color graphicColor;
 
         [Tooltip("描边（Outline）")]
-        public bool EnableOutline;
+        public bool enableOutline;
 
         [Tooltip("描边颜色")]
-        public Color OutlineColor;
+        public Color outlineColor;
 
         [Tooltip("阴影（Shadow）")]
-        public bool EnableShadow;
+        public bool enableShadow;
 
         [Tooltip("阴影颜色")]
-        public Color ShadowColor;
+        public Color shadowColor;
 
         [Tooltip("渐变（Gradient）")]
-        public bool EnableGradient;
+        public bool enableGradient;
 
         [Tooltip("渐变颜色上")]
-        public Color GradientTopColor;
+        public Color gradientTopColor;
 
         [Tooltip("渐变颜色下")]
-        public Color GradientBottomColor;
+        public Color gradientBottomColor;
 
     }
 
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
-    [AddComponentMenu("UI/Effects/ColorStyler")]
+    [AddComponentMenu("UI/PipiKit/ColorStyler")]
     public class ColorStyler : MonoBehaviour
     {
 
         [SerializeField, Tooltip("样式列表")]
-        public List<ColorStyle> StyleList = new List<ColorStyle>();
+        public List<ColorStyle> styleList = new List<ColorStyle>();
 
         [SerializeField, Tooltip("默认样式名称（组件 Start 时自动应用）")]
-        public string DefaultStyleName;
+        public string defaultStyleName;
 
         private readonly Dictionary<string, ColorStyle> m_StyleMap = new Dictionary<string, ColorStyle>();
 
@@ -61,7 +61,7 @@ namespace ChenPipi.UI
 
         private MaskableGraphic m_GraphicComp;
 
-        private MaskableGraphic GraphicComp
+        private MaskableGraphic graphicComp
         {
             get
             {
@@ -75,7 +75,7 @@ namespace ChenPipi.UI
 
         private Outline m_OutlineComp;
 
-        private Outline OutlineComp
+        private Outline outlineComp
         {
             get
             {
@@ -89,7 +89,7 @@ namespace ChenPipi.UI
 
         private Shadow m_ShadowComp;
 
-        private Shadow ShadowComp
+        private Shadow shadowComp
         {
             get
             {
@@ -110,7 +110,7 @@ namespace ChenPipi.UI
 
         private Gradient m_GradientComp;
 
-        private Gradient GradientComp
+        private Gradient gradientComp
         {
             get
             {
@@ -126,9 +126,9 @@ namespace ChenPipi.UI
 
         protected void Start()
         {
-            if (!string.IsNullOrEmpty(DefaultStyleName))
+            if (!string.IsNullOrEmpty(defaultStyleName))
             {
-                ApplyStyle(DefaultStyleName);
+                ApplyStyle(defaultStyleName);
             }
         }
 
@@ -140,14 +140,14 @@ namespace ChenPipi.UI
         protected void RefreshIndexingMap()
         {
             m_StyleMap.Clear();
-            foreach (ColorStyle style in StyleList)
+            foreach (ColorStyle style in styleList)
             {
-                if (m_StyleMap.ContainsKey(style.Name))
+                if (m_StyleMap.ContainsKey(style.name))
                 {
-                    Debug.LogError(string.Format("[ColorStyler] Style name '{0}' duplicated!", style.Name), this);
+                    Debug.LogError(string.Format("[ColorStyler] Style name '{0}' duplicated!", style.name), this);
                     continue;
                 }
-                m_StyleMap.Add(style.Name, style);
+                m_StyleMap.Add(style.name, style);
             }
         }
 
@@ -164,17 +164,17 @@ namespace ChenPipi.UI
 
         public void ApplyStyleByIndex(int index)
         {
-            if (index < 0 || index > StyleList.Count - 1)
+            if (index < 0 || index > styleList.Count - 1)
             {
                 Debug.LogError(string.Format("[ColorStyler] Cannot found style with index '{0}'!", index), this);
                 return;
             }
-            ApplyStyle(StyleList[index]);
+            ApplyStyle(styleList[index]);
         }
 
         public ColorStyle GetStyle(string name)
         {
-            if (StyleList.Count == 0)
+            if (styleList.Count == 0)
             {
                 return null;
             }
@@ -195,7 +195,7 @@ namespace ChenPipi.UI
 
         public string[] GetStyleNames()
         {
-            if (StyleList.Count == 0)
+            if (styleList.Count == 0)
             {
                 return new string[] { };
             }
@@ -210,17 +210,17 @@ namespace ChenPipi.UI
 
         public void ApplyStyle(ColorStyle style)
         {
-            if (style.EnableGraphic) ApplyGraphicColor(style.GraphicColor);
-            if (style.EnableOutline) ApplyOutlineColor(style.OutlineColor);
-            if (style.EnableShadow) ApplyShadowColor(style.ShadowColor);
-            if (style.EnableGradient) ApplyGradientColor(style.GradientTopColor, style.GradientBottomColor);
+            if (style.enableGraphic) ApplyGraphicColor(style.graphicColor);
+            if (style.enableOutline) ApplyOutlineColor(style.outlineColor);
+            if (style.enableShadow) ApplyShadowColor(style.shadowColor);
+            if (style.enableGradient) ApplyGradientColor(style.gradientTopColor, style.gradientBottomColor);
         }
 
         #region Styling Implementation
 
         public void ApplyGraphicColor(Color color)
         {
-            if (GraphicComp == null)
+            if (graphicComp == null)
             {
                 Debug.LogWarning("[ColorStyler] Applying color failed, no 'MaskableGraphic' component found!", this);
                 return;
@@ -230,7 +230,7 @@ namespace ChenPipi.UI
 
         public void ApplyOutlineColor(Color color)
         {
-            if (OutlineComp == null)
+            if (outlineComp == null)
             {
                 Debug.LogWarning("[ColorStyler] Applying color failed, no 'Outline' component found!", this);
                 return;
@@ -240,7 +240,7 @@ namespace ChenPipi.UI
 
         public void ApplyShadowColor(Color color)
         {
-            if (ShadowComp == null)
+            if (shadowComp == null)
             {
                 Debug.LogWarning("[ColorStyler] Applying color failed, no 'Shadow' component found!", this);
                 return;
@@ -250,7 +250,7 @@ namespace ChenPipi.UI
 
         public void ApplyGradientColor(Color topColor, Color bottomColor)
         {
-            if (GradientComp == null)
+            if (gradientComp == null)
             {
                 Debug.LogWarning("[ColorStyler] Applying color failed, no 'Gradient' component found!", this);
                 return;

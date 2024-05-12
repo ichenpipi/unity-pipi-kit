@@ -3,7 +3,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
-namespace ChenPipi
+namespace ChenPipi.PipiKit
 {
 
     public class ReadOnlyAttribute : PropertyAttribute { }

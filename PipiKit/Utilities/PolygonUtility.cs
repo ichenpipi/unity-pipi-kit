@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ChenPipi.Utility
+namespace ChenPipi.PipiKit
 {
 
     public static class PolygonUtility

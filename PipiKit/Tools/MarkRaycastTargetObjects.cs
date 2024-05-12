@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace ChenPipi.PipiToolbox
+namespace ChenPipi.PipiKit
 {
 
     /// <summary>
@@ -11,11 +11,12 @@ namespace ChenPipi.PipiToolbox
     /// <version>20220913</version>
     public class MarkRaycastTargetObjects : MonoBehaviour
     {
+
 #if UNITY_EDITOR
         [SerializeField]
         public Color color = Color.red;
 
-        private readonly Vector3[] _fourCornersArray = new Vector3[4];
+        private readonly Vector3[] m_FourCornersArray = new Vector3[4];
 
         private void OnDrawGizmos()
         {
@@ -31,11 +32,11 @@ namespace ChenPipi.PipiToolbox
                 {
                     continue;
                 }
-                rectTransform.GetWorldCorners(_fourCornersArray);
+                rectTransform.GetWorldCorners(m_FourCornersArray);
                 Gizmos.color = color;
                 for (var i = 0; i < 4; i++)
                 {
-                    Gizmos.DrawLine(_fourCornersArray[i], _fourCornersArray[(i + 1) % 4]);
+                    Gizmos.DrawLine(m_FourCornersArray[i], m_FourCornersArray[(i + 1) % 4]);
                 }
             }
         }

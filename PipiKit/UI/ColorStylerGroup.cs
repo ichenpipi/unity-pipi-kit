@@ -2,31 +2,32 @@
 using System.Linq;
 using UnityEngine;
 
-namespace ChenPipi.UI
+namespace ChenPipi.PipiKit.UI
 {
 
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
+    [AddComponentMenu("UI/ColorStylerGroup")]
     public class ColorStylerGroup : MonoBehaviour
     {
 
         [SerializeField, Tooltip("样式器列表")]
-        public List<ColorStyler> StylerList = new List<ColorStyler>();
+        public List<ColorStyler> stylerList = new List<ColorStyler>();
 
         [SerializeField, Tooltip("默认样式名称（组件 Start 时自动应用）")]
-        public string DefaultStyleName;
+        public string defaultStyleName;
 
         protected void Start()
         {
-            if (!string.IsNullOrEmpty(DefaultStyleName))
+            if (!string.IsNullOrEmpty(defaultStyleName))
             {
-                ApplyStyle(DefaultStyleName);
+                ApplyStyle(defaultStyleName);
             }
         }
 
         public void ApplyStyle(string name)
         {
-            foreach (ColorStyler styler in StylerList)
+            foreach (ColorStyler styler in stylerList)
             {
                 styler.ApplyStyle(name);
             }
@@ -34,13 +35,13 @@ namespace ChenPipi.UI
 
         public List<string> GetStyleNameList()
         {
-            if (StylerList.Count == 0)
+            if (stylerList.Count == 0)
             {
                 return new List<string>();
             }
 
             List<string[]> list = new List<string[]>();
-            foreach (ColorStyler styler in StylerList)
+            foreach (ColorStyler styler in stylerList)
             {
                 list.Add(styler.GetStyleNames());
             }

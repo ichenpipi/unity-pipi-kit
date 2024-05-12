@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using ChenPipi.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ChenPipi.UI
+namespace ChenPipi.PipiKit.UI
 {
 
-    [AddComponentMenu("UI/PolygonImage", 12)]
+    [AddComponentMenu("UI/PipiKit/PolygonImage", 12)]
     [ExecuteInEditMode]
     public class PolygonImage : Image
     {

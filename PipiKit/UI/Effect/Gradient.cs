@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ChenPipi.UI
+namespace ChenPipi.PipiKit.UI
 {
 
     /// <summary>
@@ -10,7 +10,7 @@ namespace ChenPipi.UI
     /// <author>陈皮皮</author>
     /// <version>20220926</version>
     [DisallowMultipleComponent]
-    [AddComponentMenu("UI/Effects/Gradient")]
+    [AddComponentMenu("UI/PipiKit/Effects/Gradient")]
     public class Gradient : BaseMeshEffect
     {
 

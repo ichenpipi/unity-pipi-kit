@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.UI;
 using UnityEngine;
 
-namespace ChenPipi.UI
+namespace ChenPipi.PipiKit.UI
 {
 
     [CustomEditor(typeof(PolygonImage), true)]

@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ChenPipi.UI
+namespace ChenPipi.PipiKit.UI
 {
 
+    [AddComponentMenu("UI/PipiKit/GraphicsRaycasterLite")]
     public class GraphicsRaycasterLite : GraphicRaycaster
     {
 

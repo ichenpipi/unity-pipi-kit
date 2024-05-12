@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ChenPipi.UI
+namespace ChenPipi.PipiKit.UI
 {
 
     [CustomEditor(typeof(ColorStylerGroup))]
@@ -33,10 +33,10 @@ namespace ChenPipi.UI
             serializedObject.Update();
             {
                 // 样式器列表
-                SerializedProperty stylerList = serializedObject.FindProperty("StylerList");
+                SerializedProperty stylerList = serializedObject.FindProperty("stylerList");
                 EditorGUILayout.PropertyField(stylerList, true);
                 // 默认样式
-                SerializedProperty defaultStyleName = serializedObject.FindProperty("DefaultStyleName");
+                SerializedProperty defaultStyleName = serializedObject.FindProperty("defaultStyleName");
                 m_DefaultStyleIndex = GetStyleIndexByName(defaultStyleName.stringValue) + 1;
                 EditorGUI.BeginChangeCheck();
                 m_DefaultStyleIndex = DrawDefaultStyleDropdownGUI(m_DefaultStyleIndex);
@@ -70,10 +70,10 @@ namespace ChenPipi.UI
                 // 一键收集组件
                 if (GUILayout.Button("收集子节点的 ColorStyler 组件"))
                 {
-                    m_TargetComp.StylerList.Clear();
+                    m_TargetComp.stylerList.Clear();
                     foreach (ColorStyler styler in m_TargetComp.GetComponentsInChildren<ColorStyler>())
                     {
-                        m_TargetComp.StylerList.Add(styler);
+                        m_TargetComp.stylerList.Add(styler);
                     }
                 }
             }

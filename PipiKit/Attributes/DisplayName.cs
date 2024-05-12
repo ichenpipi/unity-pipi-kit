@@ -4,7 +4,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
-namespace ChenPipi
+namespace ChenPipi.PipiKit
 {
 
 #if UNITY_EDITOR
