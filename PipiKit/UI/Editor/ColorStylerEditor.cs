@@ -160,20 +160,14 @@ namespace ChenPipi.PipiKit.UI
             {
                 EditorGUI.indentLevel++;
 
-                if (isNameEmpty || isNameDuplicated)
-                {
-                    GUIContent nameGUIContent = new GUIContent("<color=red>样式名称</color>");
-                    name.stringValue = EditorGUILayout.TextField(nameGUIContent, name.stringValue);
-                }
-                else
-                {
-                    name.stringValue = EditorGUILayout.TextField("样式名称", name.stringValue);
-                }
-
-                DrawExpandableBoolProperty(property, "EnableGraphic", "GraphicColor");
-                DrawExpandableBoolProperty(property, "EnableOutline", "OutlineColor");
-                DrawExpandableBoolProperty(property, "EnableShadow", "ShadowColor");
-                DrawExpandableBoolProperty(property, "EnableGradient", "GradientTopColor", "GradientBottomColor");
+                // 名称
+                string nameLabel = (isNameEmpty || isNameDuplicated ? "<color=red>样式名称</color>" : "样式名称");
+                name.stringValue = EditorGUILayout.TextField(nameLabel, name.stringValue);
+                // 样式
+                DrawExpandableBoolProperty(property, "enableGraphic", "graphicColor");
+                DrawExpandableBoolProperty(property, "enableOutline", "outlineColor");
+                DrawExpandableBoolProperty(property, "enableShadow", "shadowColor");
+                DrawExpandableBoolProperty(property, "enableGradient", "gradientTopColor", "gradientBottomColor");
 
                 // 编辑器附加功能
                 {

@@ -7,7 +7,7 @@ namespace ChenPipi.PipiKit.UI
 
     [ExecuteInEditMode]
     [DisallowMultipleComponent]
-    [AddComponentMenu("UI/ColorStylerGroup")]
+    [AddComponentMenu("UI/PipiKit/ColorStylerGroup")]
     public class ColorStylerGroup : MonoBehaviour
     {
 

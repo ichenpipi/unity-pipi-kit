@@ -10,7 +10,7 @@ namespace ChenPipi.PipiKit.UI
     /// <author>陈皮皮</author>
     /// <version>20220926</version>
     [DisallowMultipleComponent]
-    [AddComponentMenu("UI/PipiKit/Effects/Gradient")]
+    [AddComponentMenu("UI/PipiKit/Effect/Gradient")]
     public class Gradient : BaseMeshEffect
     {
 
